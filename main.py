@@ -47,7 +47,17 @@ saved3 = cv2.imwrite(
     "data_out/threshold_difference.png",
   ImgThreshold
 )
+сontour, _ = cv2.findContours(
+    ImgThreshold,
+    cv2.RETR_EXTERNAL,
+    cv2.CHAIN_APPROX_SIMPLE
+)
 
+result = img2.copy()
+for c in сontour:
+    x, y, w, h = cv2.boundingRect(c)
+
+    cv2.rectangle(result,(x, y),(x + w, y + h), (0, 0, 255),3)
 
 saved1 = cv2.imwrite("data_out/difference.png", difference)
 saved2 = cv2.imwrite("data_out/gray_difference.png", DifferenceWithColor)
@@ -62,5 +72,12 @@ print("threshold shape:", ImgThreshold.shape)
 
 print("gray unique values:", np.unique(DifferenceWithColor))
 print("threshold unique values:", np.unique(ImgThreshold))
+print("Contours found:", len(сontour))
+saved4 = cv2.imwrite(
+    "data_out/result_with_rectangle.png",
+    result
+)
+
+print("rectangle image has been saved:", saved4)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
