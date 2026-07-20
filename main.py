@@ -47,28 +47,37 @@ saved3 = cv2.imwrite(
     "data_out/threshold_difference.png",
   ImgThreshold
 )
-сontour, _ = cv2.findContours(
+contour, _ = cv2.findContours(
     ImgThreshold,
     cv2.RETR_EXTERNAL,
     cv2.CHAIN_APPROX_SIMPLE
 )
 
 result = img2.copy()
-count=0
-for c in сontour:
+count = 0
 
-   area = cv2.contourArea(c)
+for c in contour:
+    area = cv2.contourArea(c)
 
-   if area < mininum:
+    if area < mininum:
         continue
-count+=1
-x, y, w, h = cv2.boundingRect(c)
 
-cv2.rectangle(result,(x, y),(x + w, y + h), (0, 0, 255),3)
-cv2.putText(
-    result,
-    f"Difference {count}",(x, y - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.7,(0, 0, 255), 2
-)
+    count += 1
+
+    x, y, w, h = cv2.boundingRect(c)
+
+    cv2.rectangle(
+        result,
+        (x, y),
+        (x + w, y + h),
+        (0, 0, 255),
+        3
+    )
+
+    cv2.putText(
+        result,f"Difference {count}",(x, max(y - 10, 20)),cv2.FONT_HERSHEY_SIMPLEX,0.7,(0, 0, 255),
+        2
+    )
 
 saved1 = cv2.imwrite("data_out/difference.png", difference)
 saved2 = cv2.imwrite("data_out/gray_difference.png", DifferenceWithColor)
@@ -78,12 +87,12 @@ print("gray difference saved:", saved2)
 print("threshold saved:", saved3)
 
 print("difference shape:", difference.shape)
-print("gray shape:", ImgThreshold.shape)
+print("gray shape:", DifferenceWithColor.shape)
 print("threshold shape:", ImgThreshold.shape)
 
 print("gray unique values:", np.unique(DifferenceWithColor))
 print("threshold unique values:", np.unique(ImgThreshold))
-print("Contours found:", len(сontour))
+print("Contours found:", len(contour))
 print("Differences found:", count)
 saved4 = cv2.imwrite(
     "data_out/result_with_rectangle.png",
