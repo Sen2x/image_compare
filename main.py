@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+mininum =100
 path1= "data_in/image1.png"
 path2= "data_in/image2.png"
 img1= cv2.imread(path1)
@@ -54,10 +54,21 @@ saved3 = cv2.imwrite(
 )
 
 result = img2.copy()
+count=0
 for c in сontour:
-    x, y, w, h = cv2.boundingRect(c)
 
-    cv2.rectangle(result,(x, y),(x + w, y + h), (0, 0, 255),3)
+   area = cv2.contourArea(c)
+
+   if area < mininum:
+        continue
+count+=1
+x, y, w, h = cv2.boundingRect(c)
+
+cv2.rectangle(result,(x, y),(x + w, y + h), (0, 0, 255),3)
+cv2.putText(
+    result,
+    f"Difference {count}",(x, y - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.7,(0, 0, 255), 2
+)
 
 saved1 = cv2.imwrite("data_out/difference.png", difference)
 saved2 = cv2.imwrite("data_out/gray_difference.png", DifferenceWithColor)
@@ -73,6 +84,7 @@ print("threshold shape:", ImgThreshold.shape)
 print("gray unique values:", np.unique(DifferenceWithColor))
 print("threshold unique values:", np.unique(ImgThreshold))
 print("Contours found:", len(сontour))
+print("Differences found:", count)
 saved4 = cv2.imwrite(
     "data_out/result_with_rectangle.png",
     result
