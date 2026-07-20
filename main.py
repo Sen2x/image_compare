@@ -26,3 +26,7 @@ print(type(img2))
 # print("Second picture loaded ")
 # print("Second picture shape:", img2.shape)
 
+cv2.imshow("first image",img1)
+cv2.imshow("second image",img2)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
